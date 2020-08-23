@@ -1,3 +1,5 @@
+require 'liquid'
+
 RSpec.describe FlayyerLiquid do
   it 'has a version number' do
     expect(FlayyerLiquid::VERSION).not_to be nil
@@ -57,13 +59,6 @@ RSpec.describe FlayyerLiquid::FlayyerTag do
     end
   end
 
-  it 'recieves pre-parsed values from liquid rendering engine' do
-    template = Liquid::Template.parse("{% flayyer tenant: 'tenant', deck: 'deck', template: 'template', title: '{{ product.name }}', description: '{{ product.description }}' %}")
-    href = template.render({ 'product' => { 'name' => 'Laptop', 'description' => 'This is a description!' } })
-    expect(href).to start_with('https://flayyer.host/v2/tenant/deck/template._.jpeg?__v=')
-    expect(href).to end_with('&title=Laptop&description=This+is+a+description%21')
-  end
-
   it 'can set version and extension' do
     template = Liquid::Template.parse("{% flayyer tenant: 'tenant', deck: 'deck', template: 'template', version: 123, extension: 'png' %}")
     href = template.render
@@ -75,5 +70,33 @@ RSpec.describe FlayyerLiquid::FlayyerTag do
     href = template.render
     expect(href).to start_with('https://flayyer.host/v2/t/d/t._.jpeg?__v=')
     expect(href).to end_with('&title=Hello+world%21&description=Description')
+  end
+
+  it 'recieves pre-parsed values from liquid rendering engine' do
+    template = Liquid::Template.parse("{% flayyer tenant: 'tenant', deck: 'deck', template: 'template', title: '{{ product.name }}', description: '{{ product.description }}' %}")
+    href = template.render({ 'product' => { 'name' => 'Laptop', 'description' => 'This is a description!' } })
+    expect(href).to start_with('https://flayyer.host/v2/tenant/deck/template._.jpeg?__v=')
+    expect(href).to end_with('&title=Laptop&description=This+is+a+description%21')
+  end
+
+  it 'can be used with "asign" and renders meta-tag' do
+    module Reverser
+      def reversed(input)
+        input.reverse
+      end
+    end
+    Liquid::Template.register_filter(Reverser)
+
+    html = %{
+      {%- assign reversed = product.name | reversed -%}
+      <meta property="og:image"
+            content="{% flayyer tenant: 'tenant', deck: 'deck', template: 'main', title: '{{ reversed }}' %}" >
+    }
+    template = Liquid::Template.parse(html)
+    href = template.render('product' => { 'name' => 'Laptop' })
+    # TODO: improve matching
+    expect(href).to include('<meta property="og:image"')
+    expect(href).to include('content="https://flayyer.host/v2/tenant/deck/main._.jpeg?__v=')
+    expect(href).to include('&title=potpaL" >')
   end
 end

@@ -109,10 +109,13 @@ Feel free to change images sizes from the filter [`img_url`](https://shopify.dev
 
 {%- if settings.share_image -%}
   {%- capture og_image_tags -%}
+    <--! FLAYYER integration starts -->
+    {%- assign original_image = settings.share_image | img_url: '1200x630' -%}
     <meta
       property="og:image"
-      content="{% flayyer tenant: 'tenant', deck: 'deck', template: 'main', title: '{{ og_title }}', image: "https:{{ settings.share_image | img_url: '1200x630' }}" %}"
+      content="{% flayyer tenant: 'tenant', deck: 'deck', template: 'main', title: '{{ og_title }}', image: '{{ original_image }}' %}"
     >
+    <--! FLAYYER integration ends -->
   {%- endcapture -%}
 {%- endif -%}
 
@@ -124,10 +127,13 @@ Feel free to change images sizes from the filter [`img_url`](https://shopify.dev
     {%- if product.images.size > 0 -%}
       {%- capture og_image_tags -%}
         {%- for image in product.images limit:3 -%}
+          <--! FLAYYER integration starts -->
+          {%- assign original_image = image.src | product_img_url: '800x800' -%}
           <meta
             property="og:image"
-            content="{% flayyer tenant: 'tenant', deck: 'deck', template: 'main', title: '{{ og_title }}', image: "https:{{ image.src | product_img_url: '800x800' }}" %}"
+            content="{% flayyer tenant: 'tenant', deck: 'deck', template: 'main', title: '{{ og_title }}', image: '{{ original_image }}' %}"
           >
+          <--! FLAYYER integration ends -->
         {%- endfor -%}
       {%- endcapture -%}
     {%- endif -%}
@@ -139,10 +145,13 @@ Feel free to change images sizes from the filter [`img_url`](https://shopify.dev
 
     {%- if article.image -%}
       {%- capture og_image_tags -%}
+        <--! FLAYYER integration starts -->
+        {%- assign original_image = article.src | product_img_url: '800x800' -%}
         <meta
           property="og:image"
-          content="{% flayyer tenant: 'tenant', deck: 'deck', template: 'main', title: '{{ og_title }}', description: '{{ og_description }}', image: "https:{{ article.src | product_img_url: '800x800' }}" %}"
+          content="{% flayyer tenant: 'tenant', deck: 'deck', template: 'main', title: '{{ og_title }}', description: '{{ og_description }}', image: '{{ original_image }}' %}"
         >
+        <--! FLAYYER integration ends -->
       {%- endcapture -%}
     {%- endif -%}
 
@@ -152,10 +161,13 @@ Feel free to change images sizes from the filter [`img_url`](https://shopify.dev
 
     {%- if collection.image -%}
       {%- capture og_image_tags -%}
+        <--! FLAYYER integration starts -->
+        {%- assign original_image = collection.src | product_img_url: '800x800' -%}
         <meta
           property="og:image"
-          content="{% flayyer tenant: 'tenant', deck: 'deck', template: 'main', title: '{{ og_title }}', image: "https:{{ collection.src | product_img_url: '800x800' }}" %}"
+          content="{% flayyer tenant: 'tenant', deck: 'deck', template: 'main', title: '{{ og_title }}', image: '{{ original_image }}' %}"
         >
+        <--! FLAYYER integration ends -->
       {%- endcapture -%}
     {%- endif -%}
 

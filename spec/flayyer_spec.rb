@@ -14,21 +14,21 @@ RSpec.describe FlayyerLiquid::FlayyerTag do
   it "renders flayyer url with '' arguments" do
     template = Liquid::Template.parse("{% flayyer tenant: 'tenant', deck: 'deck', template: 'template' %}")
     href = template.render('flayyer_variables' => { title: 'Hello world!' })
-    expect(href).to start_with('https://flayyer.host/v2/tenant/deck/template._.jpeg?__v=')
+    expect(href).to start_with('https://flayyer.io/v2/tenant/deck/template._.jpeg?__v=')
     expect(href).to end_with('&title=Hello+world%21')
   end
 
   it 'renders flayyer url with "" arguments' do
     template = Liquid::Template.parse('{% flayyer tenant: "tenant", deck: "deck", template: "template" %}')
     href = template.render('flayyer_variables' => { title: 'Hello world!' })
-    expect(href).to start_with('https://flayyer.host/v2/tenant/deck/template._.jpeg?__v=')
+    expect(href).to start_with('https://flayyer.io/v2/tenant/deck/template._.jpeg?__v=')
     expect(href).to end_with('&title=Hello+world%21')
   end
 
   it 'renders flayyer url with plain arguments (not recommended)' do
     template = Liquid::Template.parse('{% flayyer tenant: tenant, deck: deck, template: template %}')
     href = template.render('flayyer_variables' => { title: 'Hello world!' })
-    expect(href).to start_with('https://flayyer.host/v2/tenant/deck/template._.jpeg?__v=')
+    expect(href).to start_with('https://flayyer.io/v2/tenant/deck/template._.jpeg?__v=')
     expect(href).to end_with('&title=Hello+world%21')
   end
 
@@ -62,20 +62,20 @@ RSpec.describe FlayyerLiquid::FlayyerTag do
   it 'can set version and extension' do
     template = Liquid::Template.parse("{% flayyer tenant: 'tenant', deck: 'deck', template: 'template', version: 123, extension: 'png' %}")
     href = template.render
-    expect(href).to start_with('https://flayyer.host/v2/tenant/deck/template.123.png?__v=')
+    expect(href).to start_with('https://flayyer.io/v2/tenant/deck/template.123.png?__v=')
   end
 
   it 'can pass extra arguments as variables' do
     template = Liquid::Template.parse("{% flayyer tenant: 't', deck: 'd', template: 't', title: 'Hello world!', description: 'Description' %}")
     href = template.render
-    expect(href).to start_with('https://flayyer.host/v2/t/d/t._.jpeg?__v=')
+    expect(href).to start_with('https://flayyer.io/v2/t/d/t._.jpeg?__v=')
     expect(href).to end_with('&title=Hello+world%21&description=Description')
   end
 
   it 'recieves pre-parsed values from liquid rendering engine' do
     template = Liquid::Template.parse("{% flayyer tenant: 'tenant', deck: 'deck', template: 'template', title: '{{ product.name }}', description: '{{ product.description }}' %}")
     href = template.render({ 'product' => { 'name' => 'Laptop', 'description' => 'This is a description!' } })
-    expect(href).to start_with('https://flayyer.host/v2/tenant/deck/template._.jpeg?__v=')
+    expect(href).to start_with('https://flayyer.io/v2/tenant/deck/template._.jpeg?__v=')
     expect(href).to end_with('&title=Laptop&description=This+is+a+description%21')
   end
 
@@ -96,7 +96,7 @@ RSpec.describe FlayyerLiquid::FlayyerTag do
     href = template.render('product' => { 'name' => 'Laptop' })
     # TODO: improve matching
     expect(href).to include('<meta property="og:image"')
-    expect(href).to include('content="https://flayyer.host/v2/tenant/deck/main._.jpeg?__v=')
+    expect(href).to include('content="https://flayyer.io/v2/tenant/deck/main._.jpeg?__v=')
     expect(href).to include('&title=potpaL" >')
   end
 end

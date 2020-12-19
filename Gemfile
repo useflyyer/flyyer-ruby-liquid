@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'liquid' # peer dependency
-gem 'flayyer', '~> 1.0.0'
+gem 'flayyer', '~> 1.2.0'
 
 gem 'rake', '~> 12.0'
 group :test do
